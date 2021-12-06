@@ -16,8 +16,12 @@ const PrimaryButton = styled.button`
     }
 `
 
-const Button: React.FC = () => {
-    return <PrimaryButton>Check</PrimaryButton>
+type ButtonT = {
+    onClick: () => void
+}
+
+const Button: React.FC<ButtonT> = ({ onClick }) => {
+    return <PrimaryButton onClick={onClick}>Check</PrimaryButton>
 }
 
 export default Button

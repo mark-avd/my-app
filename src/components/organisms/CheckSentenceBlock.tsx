@@ -11,7 +11,7 @@ const BlockContainer = styled.div`
 const Heading = styled.h2``
 
 const CheckSentenceBlock: React.FC = () => {
-    const sentenceIndex = 1
+    const sentenceIndex = 0
     return (
         <BlockContainer>
             <Heading>Translate this sentence</Heading>

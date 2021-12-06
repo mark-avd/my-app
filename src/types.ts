@@ -8,7 +8,6 @@ export type SentenceIndexT = {
 
 export type OrderedArrayItemT = {
     text: string
-    id: number
     order: number
 }
 

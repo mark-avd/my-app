@@ -1,37 +1,37 @@
 import React, { useEffect, useState } from 'react'
 import { styled } from 'linaria/react'
+import Text from '../atoms/Text'
 import Word from '../atoms/Word'
 import Button from '../atoms/Button'
 import { CloudInterface, OrderedArrayItemT, SentenceIndexT } from '../../types'
 import { makeOrderedArray, shuffleArray, sortByOrder } from '../../utils/utils'
 import { mockSentences } from '../../utils/mock'
-import Text from '../atoms/Text'
 
 const Cloud = styled.div`
-    min-height: 100px;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-start;
+  align-content: flex-start;
+  align-items: flex-start;
+  border-top: 1px solid #030303;
+  display: flex;
+  flex-wrap: wrap;
+  min-height: 100px;
 `
 
 const ButtonContainer = styled.div`
-    width: 100%;
+  padding: 0 6px;
+  width: 100%;
 `
 
-const ErrorMessage = styled.div`
-    display: flex;
-    justify-content: center;
-
-    p {
-        color: red;
-    }
+const VerificationStatus = styled.div`
+  display: flex;
+  justify-content: center;
 `
 
 const DragAndDropArea: React.FC<SentenceIndexT> = ({ sentenceIndex }) => {
     const [clouds, setClouds] = useState<CloudInterface[]>()
     const [currentWord, setCurrentWord] = useState<OrderedArrayItemT | undefined>()
     const [currentCloud, setCurrentCloud] = useState<CloudInterface | undefined>()
-    const [error, setError] = useState<boolean>(false)
+    const [isWrong, setWrong] = useState<boolean>(false)
+    const [isCorrect, setCorrect] = useState<boolean>(false)
 
     useEffect(() => {
         const wordsArray: string[] = mockSentences[sentenceIndex].eng.split(' ')
@@ -41,14 +41,11 @@ const DragAndDropArea: React.FC<SentenceIndexT> = ({ sentenceIndex }) => {
         ])
     }, [sentenceIndex])
 
-    const dragStartHandler = (
-        event: React.DragEvent,
-        cloud: CloudInterface,
-        word: OrderedArrayItemT
-    ) => {
+    const dragStartHandler = (event: React.DragEvent, cloud: CloudInterface, word: OrderedArrayItemT) => {
         setCurrentWord(word)
         setCurrentCloud(cloud)
-        setError(false)
+        setWrong(false)
+        setCorrect(false)
     }
 
     const dragEndHandler = (event: React.DragEvent<HTMLDivElement>) => {
@@ -59,11 +56,7 @@ const DragAndDropArea: React.FC<SentenceIndexT> = ({ sentenceIndex }) => {
         event.preventDefault()
     }
 
-    const dropHandler = (
-        event: React.DragEvent<HTMLDivElement>,
-        cloud: CloudInterface,
-        word: OrderedArrayItemT
-    ) => {
+    const dropHandler = (event: React.DragEvent<HTMLDivElement>, cloud: CloudInterface, word: OrderedArrayItemT) => {
         event.preventDefault()
         event.stopPropagation()
         if (currentWord && currentCloud?.words && word && cloud.words) {
@@ -110,15 +103,14 @@ const DragAndDropArea: React.FC<SentenceIndexT> = ({ sentenceIndex }) => {
         if (clouds && clouds[0].words) {
             const sentence: string | undefined = clouds[0].words.map((word) => word.text).join(' ')
             if (sentence !== mockSentences[sentenceIndex].eng) {
-                setError(true)
-                console.log('wrong')
+                setWrong(true)
             }
             if (sentence === mockSentences[sentenceIndex].eng) {
                 const synth = window.speechSynthesis
                 const utterThis = new SpeechSynthesisUtterance(sentence)
                 utterThis.lang = 'en-US'
                 synth.speak(utterThis)
-                console.log('correct')
+                setCorrect(true)
             }
         }
     }
@@ -128,9 +120,7 @@ const DragAndDropArea: React.FC<SentenceIndexT> = ({ sentenceIndex }) => {
             {clouds?.map((cloud: CloudInterface) => (
                 <Cloud
                     onDragOver={(event: React.DragEvent<HTMLDivElement>) => dragOverHandler(event)}
-                    onDrop={(event: React.DragEvent<HTMLDivElement>) =>
-                        dropCloudHandler(event, cloud)
-                    }
+                    onDrop={(event: React.DragEvent<HTMLDivElement>) => dropCloudHandler(event, cloud)}
                     key={cloud.id}
                 >
                     {cloud.words?.map((word: OrderedArrayItemT) => {
@@ -151,12 +141,10 @@ const DragAndDropArea: React.FC<SentenceIndexT> = ({ sentenceIndex }) => {
                     })}
                 </Cloud>
             ))}
-            {error ? (
-                <ErrorMessage>
-                    <Text text={'Wrong'} />
-                </ErrorMessage>
-            ) : null}
-
+            <VerificationStatus>
+                {isWrong && <Text text={'Wrong'} />}
+                {isCorrect && <Text text={'Correct'} />}
+            </VerificationStatus>
             <ButtonContainer>
                 <Button onClick={checkSentence} />
             </ButtonContainer>

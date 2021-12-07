@@ -3,21 +3,34 @@ import { styled } from 'linaria/react'
 import TranslatedSentence from '../molecules/TranslatedSentence'
 import DragAndDropArea from './DragAndDropArea'
 
-const BlockContainer = styled.div`
-    width: 50vw;
-    margin: 120px auto;
+const CheckSentenceBlockContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0 auto;
+  height: 100vh;
+  width: 32vw;
 `
 
-const Heading = styled.h2``
+const Heading = styled.h1`
+  font-weight: 500;
+  margin-bottom: 24px;
+`
+
+const TranslatedSentenceContainer = styled.div`
+  margin-bottom: 24px;
+`
 
 const CheckSentenceBlock: React.FC = () => {
     const sentenceIndex = 0
     return (
-        <BlockContainer>
+        <CheckSentenceBlockContainer>
             <Heading>Translate this sentence</Heading>
-            <TranslatedSentence sentenceIndex={sentenceIndex} />
+            <TranslatedSentenceContainer>
+                <TranslatedSentence sentenceIndex={sentenceIndex} />
+            </TranslatedSentenceContainer>
             <DragAndDropArea sentenceIndex={sentenceIndex} />
-        </BlockContainer>
+        </CheckSentenceBlockContainer>
     )
 }
 

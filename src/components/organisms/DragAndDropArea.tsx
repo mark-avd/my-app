@@ -14,16 +14,42 @@ const Cloud = styled.div`
   display: flex;
   flex-wrap: wrap;
   min-height: 100px;
+  padding-top: 6px;
 `
 
 const ButtonContainer = styled.div`
   padding: 0 6px;
   width: 100%;
+  margin-top: -32px;
+  transition: margin-top 0.5s ease;
+  
+  &[data-status="show"] {
+    margin-top: 12px;
+  }
 `
 
 const VerificationStatus = styled.div`
   display: flex;
+  font-weight: 600;
   justify-content: center;
+  height: 30px;
+  margin-top: 12px;
+
+  &[data-color="red"] {
+    p {
+      color: #f31616;
+    }
+  }
+
+  &[data-color="green"] {
+    p {
+      color: #17d217;
+    }
+  }
+`
+
+const ButtonWrapper = styled.div`
+  height: 120px;
 `
 
 const DragAndDropArea: React.FC<SentenceIndexT> = ({ sentenceIndex }) => {
@@ -62,10 +88,12 @@ const DragAndDropArea: React.FC<SentenceIndexT> = ({ sentenceIndex }) => {
         if (currentWord && currentCloud?.words && word && cloud.words) {
             const currentIndex: number = currentCloud.words.indexOf(currentWord)
             currentCloud.words.splice(currentIndex, 1)
+
             const dropIndex: number = cloud.words.indexOf(word)
-            cloud.words.splice(dropIndex + 1, 0, currentWord)
+            cloud.words.splice(dropIndex, 0, currentWord)
+
             setClouds(
-                clouds?.map((c) => {
+                clouds?.map((c: CloudInterface) => {
                     if (c.id === cloud.id) {
                         return cloud
                     }
@@ -106,17 +134,18 @@ const DragAndDropArea: React.FC<SentenceIndexT> = ({ sentenceIndex }) => {
                 setWrong(true)
             }
             if (sentence === mockSentences[sentenceIndex].eng) {
-                const synth = window.speechSynthesis
                 const utterThis = new SpeechSynthesisUtterance(sentence)
                 utterThis.lang = 'en-US'
-                synth.speak(utterThis)
                 setCorrect(true)
+                if (!speechSynthesis.speaking) {
+                    speechSynthesis.speak(utterThis)
+                }
             }
         }
     }
 
     return (
-        <div>
+        <>
             {clouds?.map((cloud: CloudInterface) => (
                 <Cloud
                     onDragOver={(event: React.DragEvent<HTMLDivElement>) => dragOverHandler(event)}
@@ -141,14 +170,20 @@ const DragAndDropArea: React.FC<SentenceIndexT> = ({ sentenceIndex }) => {
                     })}
                 </Cloud>
             ))}
-            <VerificationStatus>
-                {isWrong && <Text text={'Wrong'} />}
-                {isCorrect && <Text text={'Correct'} />}
-            </VerificationStatus>
-            <ButtonContainer>
-                <Button onClick={checkSentence} />
-            </ButtonContainer>
-        </div>
+            <ButtonWrapper>
+                <VerificationStatus
+                    data-color={isWrong && 'red' || isCorrect && 'green'}
+                >
+                    {isWrong && <Text text={'Something is wrong!'} />}
+                    {isCorrect && <Text text={'Correct!'} />}
+                </VerificationStatus>
+                <ButtonContainer
+                    data-status={(isWrong || isCorrect) && 'show'}
+                >
+                    <Button onClick={checkSentence} />
+                </ButtonContainer>
+            </ButtonWrapper>
+        </>
     )
 }
 

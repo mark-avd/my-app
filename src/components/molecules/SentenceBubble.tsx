@@ -8,7 +8,7 @@ const Bubble = styled.div`
     background: #ffffff;
     border: #030303 solid 1px;
     border-radius: 13px 13px 13px 8px;
-    padding: 2px;
+    padding: 6px;
     position: relative;
     width: 100%;
 

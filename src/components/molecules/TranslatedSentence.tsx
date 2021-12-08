@@ -1,8 +1,8 @@
 import React from 'react'
-import Icon from '../atoms/Icon'
-import { SentenceIndexT } from '../../types'
 import { styled } from 'linaria/react'
+import Icon from '../atoms/Icon'
 import SentenceBubble from './SentenceBubble'
+import { SentenceIndexT } from '../../types'
 
 const IconContainer = styled.div`
   width: 40%;

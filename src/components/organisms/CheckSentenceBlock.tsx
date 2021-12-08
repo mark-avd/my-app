@@ -22,7 +22,7 @@ const TranslatedSentenceContainer = styled.div`
 `
 
 const CheckSentenceBlock: React.FC = () => {
-    const sentenceIndex = 0
+    const sentenceIndex = Math.floor(Math.random() * 2)
     return (
         <CheckSentenceBlockContainer>
             <Heading>Translate this sentence</Heading>

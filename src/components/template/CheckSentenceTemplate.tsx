@@ -1,7 +1,7 @@
 import React from 'react'
 import { styled } from 'linaria/react'
-import TranslatedSentence from '../molecules/TranslatedSentence'
-import DragAndDropArea from './DragAndDropArea'
+import SentenceToTranslateBlock from '../molecules/SentenceToTranslateBlock'
+import DragAndDropBlock from '../organisms/DragAndDropBlock'
 
 const CheckSentenceBlockContainer = styled.div`
   display: flex;
@@ -21,17 +21,17 @@ const TranslatedSentenceContainer = styled.div`
   margin-bottom: 24px;
 `
 
-const CheckSentenceBlock: React.FC = () => {
+const CheckSentenceTemplate: React.FC = () => {
     const sentenceIndex = Math.floor(Math.random() * 2)
     return (
         <CheckSentenceBlockContainer>
             <Heading>Translate this sentence</Heading>
             <TranslatedSentenceContainer>
-                <TranslatedSentence sentenceIndex={sentenceIndex} />
+                <SentenceToTranslateBlock sentenceIndex={sentenceIndex} />
             </TranslatedSentenceContainer>
-            <DragAndDropArea sentenceIndex={sentenceIndex} />
+            <DragAndDropBlock sentenceIndex={sentenceIndex} />
         </CheckSentenceBlockContainer>
     )
 }
 
-export default CheckSentenceBlock
+export default CheckSentenceTemplate

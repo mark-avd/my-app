@@ -4,6 +4,11 @@ import Icon from '../atoms/Icon'
 import SentenceBubble from './SentenceBubble'
 import { SentenceIndexT } from '../../types'
 
+const SentenceToTranslateContainer = styled.div`
+  display: flex;
+  margin-top: 16px;
+`
+
 const IconContainer = styled.div`
   width: 40%;
 
@@ -18,22 +23,17 @@ const BubbleContainer = styled.div`
   width: 60%;
 `
 
-const TranslatedSentenceContainer = styled.div`
-  display: flex;
-  margin-top: 16px;
-`
-
-const TranslatedSentence: React.FC<SentenceIndexT> = ({ sentenceIndex }) => {
+const SentenceToTranslateBlock: React.FC<SentenceIndexT> = ({ sentenceIndex }) => {
     return (
-        <TranslatedSentenceContainer>
+        <SentenceToTranslateContainer>
             <IconContainer>
                 <Icon type={'person'} />
             </IconContainer>
             <BubbleContainer>
                 <SentenceBubble sentenceIndex={sentenceIndex} />
             </BubbleContainer>
-        </TranslatedSentenceContainer>
+        </SentenceToTranslateContainer>
     )
 }
 
-export default TranslatedSentence
+export default SentenceToTranslateBlock

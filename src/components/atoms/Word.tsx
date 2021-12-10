@@ -1,21 +1,20 @@
 import React from 'react'
 import { styled } from 'linaria/react'
-import { TextInterface } from '../../types'
 import Text from './Text'
+import { TextT } from '../../types'
 
-const WordContainer = styled.div`
-    background: #fff;
+const TextContainer = styled.div`
+    background: transparent;
     border: 1px solid #949494;
     border-radius: 12px;
     cursor: grab;
-    margin: 5px;
 `
 
-const Word: React.FC<TextInterface> = ({ text }) => {
+const Word: React.FC<TextT> = ({ text }) => {
     return (
-        <WordContainer>
+        <TextContainer>
             <Text text={text} />
-        </WordContainer>
+        </TextContainer>
     )
 }
 

@@ -1,4 +1,4 @@
-export interface TextInterface {
+export type TextT = {
     text: string
 }
 
@@ -16,4 +16,7 @@ export interface CloudInterface {
     words: OrderedArrayItemT[] | undefined
 }
 
-
+export type DragItemT = {
+    groupIndex: number
+    itemIndex: number
+}

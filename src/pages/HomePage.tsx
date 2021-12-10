@@ -1,8 +1,8 @@
 import React from 'react'
-import CheckSentenceBlock from '../components/organisms/CheckSentenceBlock'
+import CheckSentenceTemplate from '../components/template/CheckSentenceTemplate'
 
 const HomePage: React.FC = () => {
-    return <CheckSentenceBlock />
+    return <CheckSentenceTemplate />
 }
 
 export default HomePage

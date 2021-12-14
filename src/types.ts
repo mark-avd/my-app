@@ -18,5 +18,5 @@ export interface CloudInterface {
 
 export type DragItemT = {
     groupIndex: number
-    itemIndex: number
+    itemIndex: number | undefined
 }

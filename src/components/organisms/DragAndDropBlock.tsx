@@ -1,20 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { styled } from 'linaria/react'
 import Word from '../atoms/Word'
+import Cloud from '../atoms/Cloud'
 import CheckSentenceControls from '../molecules/CheckSentenceControls'
 import { CloudInterface, DragItemT, OrderedArrayItemT, SentenceIndexT } from '../../types'
 import { makeOrderedArray, shuffleArray } from '../../utils/utils'
 import { mockSentences } from '../../utils/mock'
-
-const Cloud = styled.div`
-    align-content: flex-start;
-    align-items: flex-start;
-    border-top: 1px solid #030303;
-    display: flex;
-    flex-wrap: wrap;
-    min-height: 100px;
-    padding-top: 6px;
-`
 
 const WordContainer = styled.div`
     border-radius: 12px;
@@ -37,6 +28,9 @@ const DragAndDropBlock: React.FC<SentenceIndexT> = ({ sentenceIndex }) => {
     const [isCorrect, setCorrect] = useState<boolean>(false)
     const [isDragging, setDragging] = useState<boolean>(false)
 
+    const [currentWord, setCurrentWord] = useState<OrderedArrayItemT>()
+    const [currentCloud, setCurrentCloud] = useState<CloudInterface>()
+
     const [clouds, setClouds] = useState<CloudInterface[]>()
 
     const dragItem = useRef<DragItemT | null>(null)
@@ -45,14 +39,16 @@ const DragAndDropBlock: React.FC<SentenceIndexT> = ({ sentenceIndex }) => {
     useEffect(() => {
         const wordsArray: string[] = mockSentences[sentenceIndex].eng.split(' ')
         setClouds([
-            { id: 0, words: [] },
-            { id: 1, words: makeOrderedArray(shuffleArray(wordsArray)) },
+            { id: 'end', words: [] },
+            { id: 'startCloud', words: makeOrderedArray(shuffleArray(wordsArray)) },
         ])
     }, [sentenceIndex])
 
-    const dragStartHandler = (event: React.DragEvent, targetItem: DragItemT) => {
+    const dragStartHandler = (event: React.DragEvent, targetItem: DragItemT, item: OrderedArrayItemT, group: CloudInterface) => {
         setWrong(false)
         setCorrect(false)
+        setCurrentWord(item)
+        setCurrentCloud(group)
         dragItem.current = targetItem
         dragNode.current = event.target
         dragNode.current?.addEventListener('dragend', dragEndHandler)
@@ -88,6 +84,8 @@ const DragAndDropBlock: React.FC<SentenceIndexT> = ({ sentenceIndex }) => {
     const dropHandler = () => {
         dragItem.current = null
         dragNode.current = null
+        setCurrentWord(undefined)
+        setCurrentCloud(undefined)
     }
 
     const checkSentence = () => {
@@ -130,7 +128,7 @@ const DragAndDropBlock: React.FC<SentenceIndexT> = ({ sentenceIndex }) => {
                     {group.words?.map((item: OrderedArrayItemT, itemIndex: number) => (
                         <WordContainer
                             onDragStart={(event: React.DragEvent) =>
-                                dragStartHandler(event, { groupIndex, itemIndex, })
+                                dragStartHandler(event, { groupIndex, itemIndex, }, item, group)
                             }
                             onDragEnter={isDragging ? (event: React.DragEvent) =>
                                 dragEnterHandler(event, { groupIndex, itemIndex, }) : undefined

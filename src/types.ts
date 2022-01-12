@@ -12,7 +12,7 @@ export type OrderedArrayItemT = {
 }
 
 export interface CloudInterface {
-    id: number
+    id: string
     words: OrderedArrayItemT[] | undefined
 }
 

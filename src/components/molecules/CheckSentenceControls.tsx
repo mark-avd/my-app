@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { styled } from 'linaria/react'
+import { observer } from 'mobx-react-lite'
 import Text from '../atoms/Text'
 import Button from '../atoms/Button'
+import { store } from '../../stores/store'
 
 const ButtonContainer = styled.div`
     padding: 0 6px;
@@ -14,7 +16,7 @@ const ButtonContainer = styled.div`
     }
 `
 
-const VerificationStatus = styled.div`
+const VerificationStatusContainer = styled.div`
     display: flex;
     font-weight: 600;
     justify-content: center;
@@ -26,6 +28,7 @@ const VerificationStatus = styled.div`
             color: #f31616;
         }
     }
+
     &[data-color='green'] {
         p {
             color: #17d217;
@@ -37,19 +40,39 @@ const ButtonWrapper = styled.div`
     height: 120px;
 `
 
-interface CheckSentenceControls {
-    isWrong: boolean
-    isCorrect: boolean
-    checkSentence: () => void
+type CheckSentenceControls = {
+    setCurrentSentence: () => void
 }
 
-const CheckSentenceControls: React.FC<CheckSentenceControls> = ({ isWrong, isCorrect, checkSentence }) => {
+const CheckSentenceControls: React.FC<CheckSentenceControls> = ({ setCurrentSentence }) => {
+    const [isWrong, setWrong] = useState<boolean>(false)
+    const [isCorrect, setCorrect] = useState<boolean>(false)
+
+    const checkSentence = () => {
+        setCurrentSentence()
+        if (store.currentSentence) {
+            if (store.sentenceToCheck !== store.currentSentence.en) {
+                setWrong(true)
+                setTimeout(() => setWrong(false), 3000)
+            }
+            if (store.sentenceToCheck === store.currentSentence.en) {
+                const utterThis = new SpeechSynthesisUtterance(store.sentenceToCheck)
+                utterThis.lang = 'en-US'
+                setCorrect(true)
+                setTimeout(() => setCorrect(false), 3000)
+                if (!speechSynthesis.speaking) {
+                    speechSynthesis.speak(utterThis)
+                }
+            }
+        }
+    }
+
     return (
         <ButtonWrapper>
-            <VerificationStatus data-color={(isWrong && 'red') || (isCorrect && 'green')}>
+            <VerificationStatusContainer data-color={(isWrong && 'red') || (isCorrect && 'green')}>
                 {isWrong && <Text text={'Something is wrong!'} />}
                 {isCorrect && <Text text={'Correct!'} />}
-            </VerificationStatus>
+            </VerificationStatusContainer>
             <ButtonContainer data-status={(isWrong || isCorrect) && 'show'}>
                 <Button onClick={checkSentence} />
             </ButtonContainer>
@@ -57,4 +80,4 @@ const CheckSentenceControls: React.FC<CheckSentenceControls> = ({ isWrong, isCor
     )
 }
 
-export default CheckSentenceControls
+export default observer(CheckSentenceControls)

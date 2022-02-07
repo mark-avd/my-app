@@ -1,10 +1,9 @@
 import React from 'react'
 import { styled } from 'linaria/react'
 import Text from '../atoms/Text'
-import { SentenceIndexT } from '../../types'
-import { mockSentences } from '../../utils/mock'
+import { TextT } from '../../types'
 
-const Bubble = styled.div`
+const TextCloud = styled.div`
     background: #ffffff;
     border: #030303 solid 1px;
     border-radius: 13px 13px 13px 8px;
@@ -36,13 +35,13 @@ const Bubble = styled.div`
         z-index: 0;
     }
 `
-const SentenceBubble: React.FC<SentenceIndexT> = ({ sentenceIndex }) => {
-    const sentence = mockSentences[sentenceIndex].ru
+
+const Bubble: React.FC<TextT> = ({ text }) => {
     return (
-        <Bubble>
-            <Text text={sentence} />
-        </Bubble>
+        <TextCloud>
+            <Text text={text} />
+        </TextCloud>
     )
 }
 
-export default SentenceBubble
+export default Bubble

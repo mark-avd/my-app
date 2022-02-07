@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { styled } from 'linaria/react'
+import { observer } from 'mobx-react-lite'
 import Word from '../atoms/Word'
 import Cloud from '../atoms/Cloud'
 import CheckSentenceControls from '../molecules/CheckSentenceControls'
-import { CloudInterface, DragItemT, OrderedArrayItemT, SentenceIndexT } from '../../types'
-import { makeOrderedArray, shuffleArray } from '../../utils/utils'
-import { mockSentences } from '../../utils/mock'
+import { CloudInterface, DragItemT, OrderedArrayItemT } from '../../types'
+import { store } from '../../stores/store'
 
 const WordContainer = styled.div`
     border-radius: 12px;
@@ -23,32 +23,26 @@ const WordContainer = styled.div`
     }
 `
 
-const DragAndDropBlock: React.FC<SentenceIndexT> = ({ sentenceIndex }) => {
-    const [isWrong, setWrong] = useState<boolean>(false)
-    const [isCorrect, setCorrect] = useState<boolean>(false)
+const DragAndDropBlock: React.FC = () => {
     const [isDragging, setDragging] = useState<boolean>(false)
-
-    const [currentWord, setCurrentWord] = useState<OrderedArrayItemT>()
-    const [currentCloud, setCurrentCloud] = useState<CloudInterface>()
-
-    const [clouds, setClouds] = useState<CloudInterface[]>()
+    const [clouds, setClouds] = useState<CloudInterface[]>([
+        { id: 'endCloud', words: [] },
+        { id: 'startCloud', words: [] },
+    ])
 
     const dragItem = useRef<DragItemT | null>(null)
     const dragNode = useRef<EventTarget | null>(null)
 
     useEffect(() => {
-        const wordsArray: string[] = mockSentences[sentenceIndex].eng.split(' ')
-        setClouds([
-            { id: 'end', words: [] },
-            { id: 'startCloud', words: makeOrderedArray(shuffleArray(wordsArray)) },
-        ])
-    }, [sentenceIndex])
+        if (store.currentSentence) {
+            setClouds([
+                { id: 'endCloud', words: [] },
+                { id: 'startCloud', words: store.orderedArray },
+            ])
+        }
+    }, [store.currentSentence])
 
-    const dragStartHandler = (event: React.DragEvent, targetItem: DragItemT, item: OrderedArrayItemT, group: CloudInterface) => {
-        setWrong(false)
-        setCorrect(false)
-        setCurrentWord(item)
-        setCurrentCloud(group)
+    const dragStartHandler = (event: React.DragEvent, targetItem: DragItemT) => {
         dragItem.current = targetItem
         dragNode.current = event.target
         dragNode.current?.addEventListener('dragend', dragEndHandler)
@@ -84,24 +78,12 @@ const DragAndDropBlock: React.FC<SentenceIndexT> = ({ sentenceIndex }) => {
     const dropHandler = () => {
         dragItem.current = null
         dragNode.current = null
-        setCurrentWord(undefined)
-        setCurrentCloud(undefined)
     }
 
-    const checkSentence = () => {
+    const setCurrentSentence = () => {
         if (clouds && clouds[0].words) {
             const sentence: string | undefined = clouds[0].words.map((word) => word.text).join(' ')
-            if (sentence !== mockSentences[sentenceIndex].eng) {
-                setWrong(true)
-            }
-            if (sentence === mockSentences[sentenceIndex].eng) {
-                const utterThis = new SpeechSynthesisUtterance(sentence)
-                utterThis.lang = 'en-US'
-                setCorrect(true)
-                if (!speechSynthesis.speaking) {
-                    speechSynthesis.speak(utterThis)
-                }
-            }
+            store.setSentenceToCheck(sentence)
         }
     }
 
@@ -125,27 +107,27 @@ const DragAndDropBlock: React.FC<SentenceIndexT> = ({ sentenceIndex }) => {
                     }
                     key={group.id}
                 >
-                    {group.words?.map((item: OrderedArrayItemT, itemIndex: number) => (
+                    {group.words?.map((word: OrderedArrayItemT, wordIndex: number) => (
                         <WordContainer
                             onDragStart={(event: React.DragEvent) =>
-                                dragStartHandler(event, { groupIndex, itemIndex, }, item, group)
+                                dragStartHandler(event, { groupIndex, itemIndex: wordIndex, })
                             }
                             onDragEnter={isDragging ? (event: React.DragEvent) =>
-                                dragEnterHandler(event, { groupIndex, itemIndex, }) : undefined
+                                dragEnterHandler(event, { groupIndex, itemIndex: wordIndex, }) : undefined
                             }
                             onDrop={dropHandler}
-                            key={item.text + item.order}
-                            data-dragging={isDragging ? styleDraggingItem({ groupIndex, itemIndex }) : 'false'}
+                            key={word.text + word.order}
+                            data-dragging={isDragging ? styleDraggingItem({ groupIndex, itemIndex: wordIndex }) : 'false'}
                             draggable
                         >
-                            <Word text={item.text} />
+                            <Word text={word.text} />
                         </WordContainer>
                     ))}
                 </Cloud>
             ))}
-            <CheckSentenceControls isWrong={isWrong} isCorrect={isCorrect} checkSentence={checkSentence} />
+            <CheckSentenceControls setCurrentSentence={setCurrentSentence} />
         </>
     )
 }
 
-export default DragAndDropBlock
+export default observer(DragAndDropBlock)

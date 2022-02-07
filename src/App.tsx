@@ -1,5 +1,5 @@
 import React from 'react'
-import HomePage from './pages/HomePage'
+import HomePage from './pages/MainPage'
 import './App.css'
 
 function App(): React.ReactElement {

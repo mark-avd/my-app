@@ -2,12 +2,12 @@ import React from 'react'
 import { styled } from 'linaria/react'
 import { TextT } from '../../types'
 
-const BaseText = styled.p`
+const TextContainer = styled.p`
     padding: 6px 8px;
 `
 
 const Text: React.FC<TextT> = ({ text }) => {
-    return <BaseText>{text}</BaseText>
+    return <TextContainer>{text}</TextContainer>
 }
 
 export default Text

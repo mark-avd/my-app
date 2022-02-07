@@ -1,6 +1,5 @@
 import React from 'react'
 import { styled } from 'linaria/react'
-import { CloudT } from '../../types'
 
 const CloudArea = styled.div`
     align-content: flex-start;
@@ -11,6 +10,10 @@ const CloudArea = styled.div`
     min-height: 100px;
     padding-top: 6px;
 `
+
+type CloudT = {
+    onDragEnter?: (event: React.DragEvent) => void
+}
 
 const Cloud: React.FC<CloudT> = ({ onDragEnter, children }) => {
     return <CloudArea onDragEnter={onDragEnter}>{children}</CloudArea>

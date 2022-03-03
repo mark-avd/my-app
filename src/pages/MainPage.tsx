@@ -2,9 +2,9 @@ import React from 'react'
 import { styled } from 'linaria/react'
 import { observer } from 'mobx-react-lite'
 import Icon from '../components/atoms/Icon'
-import SentenceToTranslateBlock from '../components/molecules/SentencePreview'
+import SentencePreview from '../components/molecules/SentencePreview'
 
-const DragAndDropBlock = React.lazy(() => import('../components/organisms/DragAndDropBlock'))
+const DragDrop = React.lazy(() => import('../components/organisms/DragDrop'))
 
 const Container = styled.div`
     display: flex;
@@ -33,7 +33,7 @@ const MainPage: React.FC = () => {
         <Container>
             <Heading>Translate this sentence</Heading>
             <TranslatedSentenceContainer>
-                <SentenceToTranslateBlock />
+                <SentencePreview />
             </TranslatedSentenceContainer>
             <React.Suspense
                 fallback={
@@ -42,7 +42,7 @@ const MainPage: React.FC = () => {
                     </IconContainer>
                 }
             >
-                <DragAndDropBlock />
+                <DragDrop />
             </React.Suspense>
         </Container>
     )

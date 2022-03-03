@@ -8,8 +8,8 @@ class Store {
     currentSentence: SentenceObject | undefined
     sentenceToCheck: string | undefined
 
-    responseStatus: string | undefined
-    error: any
+    responseStatus: 'pending' | 'done' | 'error' | undefined
+    error: unknown
 
     constructor() {
         makeAutoObservable(this)
@@ -45,7 +45,7 @@ class Store {
                 this.sentences = response.data.sentenceAll
                 this.responseStatus = 'done'
             })
-        } catch (error: any) {
+        } catch (error: unknown) {
             runInAction(() => {
                 this.error = error
                 this.responseStatus = 'error'

@@ -1,4 +1,4 @@
-import { OrderedArrayItemT } from '../types'
+import { ItemT } from '../types'
 
 export const shuffleArray = (array: string[]): string[] => {
     for (let i = array.length - 1; i > 0; i--) {
@@ -8,19 +8,19 @@ export const shuffleArray = (array: string[]): string[] => {
     return array
 }
 
-export const makeOrderedArray = (wordsArray: string[]): OrderedArrayItemT[] => {
-    const orderedArray: OrderedArrayItemT[] = []
+export const makeOrderedArray = (wordsArray: string[]): ItemT[] => {
+    const orderedArray: ItemT[] = []
     wordsArray.map((word, index) => {
-        orderedArray.push({ text: word, order: index })
+        orderedArray.push({ text: word, id: index })
     })
     return orderedArray
 }
 
-export const sortByOrder = (wordA: OrderedArrayItemT, wordB: OrderedArrayItemT): number => {
-    if (wordA.order > wordB.order) {
+export const sortByOrder = (wordA: ItemT, wordB: ItemT): number => {
+    if (wordA.id > wordB.id) {
         return 1
     }
-    if (wordA.order < wordB.order) {
+    if (wordA.id < wordB.id) {
         return -1
     }
     return 0

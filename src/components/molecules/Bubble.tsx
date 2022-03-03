@@ -1,7 +1,7 @@
 import React from 'react'
 import { styled } from 'linaria/react'
 import Text from '../atoms/Text'
-import { TextT } from '../../types'
+import { TextProps } from '../../types'
 
 const TextCloud = styled.div`
     background: #ffffff;
@@ -36,7 +36,7 @@ const TextCloud = styled.div`
     }
 `
 
-const Bubble: React.FC<TextT> = ({ text }) => {
+const Bubble: React.FC<TextProps> = ({ text }) => {
     return (
         <TextCloud>
             <Text text={text} />

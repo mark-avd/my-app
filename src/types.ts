@@ -1,25 +1,12 @@
-export type TextT = {
+type Languages = 'ru' | 'en'
+
+export interface TextProps {
     text: string
 }
 
-export type OrderedArrayItemT = {
+export type ItemT = {
     text: string
-    order: number
-}
-
-export interface CloudInterface {
-    id: string
-    words: OrderedArrayItemT[] | undefined
-}
-
-export type DragItemT = {
-    groupIndex: number
-    itemIndex: number | undefined
-}
-
-enum Languages {
-    russian = 'ru',
-    english = 'en',
+    id: number
 }
 
 export type SentenceObject = {
@@ -31,3 +18,19 @@ export interface SentenceAllResponse {
         sentenceAll: SentenceObject[]
     }
 }
+
+// export type DragDropItemT = {
+//     index: number
+//     order: number
+//     type: string
+// }
+
+// export type GroupT = {
+//     id: 'startGroup' | 'targetGroup'
+//     words: OrderedArrayItemT[] | []
+// }
+
+// export type DragItemT = {
+//     groupIndex: number
+//     itemIndex: number | undefined
+// }

@@ -5,34 +5,27 @@ import Text from '../atoms/Text'
 import Button from '../atoms/Button'
 import { store } from '../../stores/store'
 
-const ButtonContainer = styled.div`
+type Props = {
+    showStatus: boolean
+    isCorrect: boolean
+}
+
+const ButtonContainer = styled.div<Pick<Props, 'showStatus'>>`
     padding: 0 6px;
     width: 100%;
-    margin-top: -32px;
+    margin-top: ${(props) => (props.showStatus ? '12px' : '-32px')};
     transition: margin-top 0.5s ease;
-
-    &[data-status='show'] {
-        margin-top: 12px;
-    }
 `
 
-const VerificationStatusContainer = styled.div`
+const VerificationStatusContainer = styled.div<Pick<Props, 'isCorrect'>>`
     display: flex;
     font-weight: 600;
     justify-content: center;
     height: 30px;
     margin-top: 12px;
 
-    &[data-color='red'] {
-        p {
-            color: #f31616;
-        }
-    }
-
-    &[data-color='green'] {
-        p {
-            color: #17d217;
-        }
+    p {
+        color: ${(props) => (props.isCorrect ? '#17d217' : '#f31616')};
     }
 `
 
@@ -41,39 +34,38 @@ const ButtonWrapper = styled.div`
 `
 
 type CheckSentenceControls = {
-    setCurrentSentence: () => void
+    setSentenceToCheck: () => void
 }
 
-const CheckSentenceControls: React.FC<CheckSentenceControls> = ({ setCurrentSentence }) => {
-    const [isWrong, setWrong] = useState<boolean>(false)
+const CheckSentenceControls: React.FC<CheckSentenceControls> = ({ setSentenceToCheck }) => {
     const [isCorrect, setCorrect] = useState<boolean>(false)
+    const [showStatus, setShowStatus] = useState<boolean>(false)
 
     const checkSentence = () => {
-        setCurrentSentence()
+        setSentenceToCheck()
         if (store.currentSentence) {
             if (store.sentenceToCheck !== store.currentSentence.en) {
-                setWrong(true)
-                setTimeout(() => setWrong(false), 3000)
+                setCorrect(false)
             }
             if (store.sentenceToCheck === store.currentSentence.en) {
                 const utterThis = new SpeechSynthesisUtterance(store.sentenceToCheck)
                 utterThis.lang = 'en-US'
                 setCorrect(true)
-                setTimeout(() => setCorrect(false), 3000)
                 if (!speechSynthesis.speaking) {
                     speechSynthesis.speak(utterThis)
                 }
             }
+            setShowStatus(true)
+            setTimeout(() => setShowStatus(false), 3000)
         }
     }
 
     return (
         <ButtonWrapper>
-            <VerificationStatusContainer data-color={(isWrong && 'red') || (isCorrect && 'green')}>
-                {isWrong && <Text text={'Something is wrong!'} />}
-                {isCorrect && <Text text={'Correct!'} />}
+            <VerificationStatusContainer isCorrect={isCorrect}>
+                {isCorrect ? <Text text={'Correct!'} /> : <Text text={'Something is wrong!'} />}
             </VerificationStatusContainer>
-            <ButtonContainer data-status={(isWrong || isCorrect) && 'show'}>
+            <ButtonContainer showStatus={showStatus}>
                 <Button onClick={checkSentence} />
             </ButtonContainer>
         </ButtonWrapper>

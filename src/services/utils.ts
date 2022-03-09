@@ -8,12 +8,12 @@ export const shuffleArray = (array: string[]): string[] => {
     return array
 }
 
-export const makeOrderedArray = (wordsArray: string[]): ItemT[] => {
-    const orderedArray: ItemT[] = []
+export const makeArrayWithIds = (wordsArray: string[]): ItemT[] => {
+    const arrayWithIds: ItemT[] = []
     wordsArray.map((word, index) => {
-        orderedArray.push({ text: word, id: index })
+        arrayWithIds.push({ id: index, text: word })
     })
-    return orderedArray
+    return arrayWithIds
 }
 
 export const sortByOrder = (wordA: ItemT, wordB: ItemT): number => {

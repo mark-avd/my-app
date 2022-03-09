@@ -1,26 +1,21 @@
 import { makeAutoObservable, runInAction } from 'mobx'
-import { makeOrderedArray, shuffleArray } from '../services/utils'
+import { makeArrayWithIds, shuffleArray } from '../services/utils'
 import { fetchGraphQL } from '../services/api'
-import { SentenceObject } from '../types'
+import { ItemT, SentenceObject } from '../types'
 
 class Store {
     sentences: SentenceObject[] = []
-    currentSentence: SentenceObject | undefined
+    currentSentence: SentenceObject = { ru: '', en: '' }
     sentenceToCheck: string | undefined
+    words: ItemT[] = []
+    targetWords: ItemT[] = []
 
-    responseStatus: 'pending' | 'done' | 'error' | undefined
+    responseStatus: 'pending' | 'done' | 'error' | null = null
     error: unknown
 
     constructor() {
         makeAutoObservable(this)
-        runInAction(() => this.fetchSentences().then(() => this.setCurrenSentence())).then()
-    }
-
-    get orderedArray() {
-        if (this.currentSentence) {
-            const wordsArray = this.currentSentence.en.split(' ')
-            return makeOrderedArray(shuffleArray(wordsArray))
-        }
+        runInAction(() => this.fetchSentences().then(() => this.setCurrenSentence())).then(() => this.setStartWords())
     }
 
     setCurrenSentence() {
@@ -28,12 +23,26 @@ class Store {
         this.currentSentence = this.sentences[randomSentenceIndex]
     }
 
-    setSentences(sentences: SentenceObject[]) {
-        this.sentences = sentences
+    setTargetWords(wordsArray: ItemT[]) {
+        this.targetWords = wordsArray
     }
 
-    setSentenceToCheck(sentence: string) {
-        this.sentenceToCheck = sentence
+    setWords(wordsArray: ItemT[]) {
+        this.words = wordsArray
+    }
+
+    setStartWords() {
+        const words = this.currentSentence.en.split(' ')
+        const wordsArray = makeArrayWithIds(shuffleArray(words))
+        this.setWords(wordsArray)
+    }
+
+    setSentenceToCheck() {
+        this.sentenceToCheck = store.targetWords.map((word) => word.text).join(' ')
+    }
+
+    setSentences(sentences: SentenceObject[]) {
+        this.sentences = sentences
     }
 
     async fetchSentences() {

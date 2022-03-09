@@ -33,16 +33,12 @@ const ButtonWrapper = styled.div`
     height: 120px;
 `
 
-type CheckSentenceControls = {
-    setSentenceToCheck: () => void
-}
-
-const CheckSentenceControls: React.FC<CheckSentenceControls> = ({ setSentenceToCheck }) => {
+const CheckSentenceControls: React.FC = () => {
     const [isCorrect, setCorrect] = useState<boolean>(false)
     const [showStatus, setShowStatus] = useState<boolean>(false)
 
     const checkSentence = () => {
-        setSentenceToCheck()
+        store.setSentenceToCheck()
         if (store.currentSentence) {
             if (store.sentenceToCheck !== store.currentSentence.en) {
                 setCorrect(false)

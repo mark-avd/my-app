@@ -2,7 +2,7 @@ import React from 'react'
 import { styled } from 'linaria/react'
 import { observer } from 'mobx-react-lite'
 import Icon from '../atoms/Icon'
-import Bubble from './Bubble'
+import Bubble from '../atoms/Bubble'
 import { store } from '../../stores/store'
 
 const SentencePreviewContainer = styled.div`
@@ -31,7 +31,7 @@ const SentencePreview: React.FC = () => {
                 <Icon type={'person'} />
             </IconContainer>
             <BubbleContainer>
-                <Bubble text={store.currentSentence ? store.currentSentence?.ru : ''} />
+                <Bubble text={store.currentSentence?.ru} />
             </BubbleContainer>
         </SentencePreviewContainer>
     )

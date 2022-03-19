@@ -2,6 +2,7 @@ import React, { useCallback } from 'react'
 import { styled } from 'linaria/react'
 import { useDrop } from 'react-dnd'
 import update from 'immutability-helper'
+import { sortById } from '../../services/sortById'
 import { store } from '../../stores/store'
 import { DragItem } from '../../types'
 
@@ -22,19 +23,19 @@ const Cloud: React.FC<CloudProps> = ({ group, children }) => {
     const moveWordToTargetGroup = useCallback((dragIndex: number) => {
         store.setTargetWords(
             update(store.targetWords, {
-                $push: [store.words[dragIndex]],
+                $push: [store.startWords[dragIndex]],
             })
         )
-        store.setWords(
-            update(store.words, {
+        store.setStartWords(
+            update(store.startWords, {
                 $splice: [[dragIndex, 1]],
             })
         )
     }, [])
 
     const moveWordToStartGroup = useCallback((dragIndex: number) => {
-        store.setWords(
-            update(store.words, {
+        store.setStartWords(
+            update(store.startWords, {
                 $push: [store.targetWords[dragIndex]],
             })
         )
@@ -54,6 +55,7 @@ const Cloud: React.FC<CloudProps> = ({ group, children }) => {
             }
             if (group === 'start' && item.group === 'target') {
                 moveWordToStartGroup(dragIndex)
+                setTimeout(() => store.setStartWords([...store.startWords].sort(sortById)), 500)
             }
         },
     })

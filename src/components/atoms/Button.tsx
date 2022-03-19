@@ -1,7 +1,7 @@
 import React from 'react'
 import { styled } from 'linaria/react'
 
-type ButtonT = {
+interface ButtonProps {
     onClick: () => void
 }
 
@@ -20,7 +20,7 @@ const PrimaryButton = styled.button`
     }
 `
 
-const Button: React.FC<ButtonT> = ({ onClick }) => {
+const Button: React.FC<ButtonProps> = ({ onClick }) => {
     return <PrimaryButton onClick={onClick}>Check</PrimaryButton>
 }
 

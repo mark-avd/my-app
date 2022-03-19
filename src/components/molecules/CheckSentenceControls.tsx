@@ -5,19 +5,23 @@ import Text from '../atoms/Text'
 import Button from '../atoms/Button'
 import { store } from '../../stores/store'
 
-type Props = {
+type StyleProps = {
     showStatus: boolean
     isCorrect: boolean
 }
 
-const ButtonContainer = styled.div<Pick<Props, 'showStatus'>>`
-    padding: 0 6px;
-    width: 100%;
-    margin-top: ${(props) => (props.showStatus ? '12px' : '-32px')};
-    transition: margin-top 0.5s ease;
+const CheckSentenceControlsContainer = styled.div`
+    height: 120px;
 `
 
-const VerificationStatusContainer = styled.div<Pick<Props, 'isCorrect'>>`
+const ButtonContainer = styled.div<Pick<StyleProps, 'showStatus'>>`
+    padding: 0 6px;
+    margin: ${(props) => (props.showStatus ? '12px' : '-32px')} auto;
+    transition: margin 0.5s ease;
+    width: 90%;
+`
+
+const VerificationStatusContainer = styled.div<Pick<StyleProps, 'isCorrect'>>`
     display: flex;
     font-weight: 600;
     justify-content: center;
@@ -29,42 +33,36 @@ const VerificationStatusContainer = styled.div<Pick<Props, 'isCorrect'>>`
     }
 `
 
-const ButtonWrapper = styled.div`
-    height: 120px;
-`
-
 const CheckSentenceControls: React.FC = () => {
     const [isCorrect, setCorrect] = useState<boolean>(false)
     const [showStatus, setShowStatus] = useState<boolean>(false)
 
     const checkSentence = () => {
         store.setSentenceToCheck()
-        if (store.currentSentence) {
-            if (store.sentenceToCheck !== store.currentSentence.en) {
-                setCorrect(false)
-            }
-            if (store.sentenceToCheck === store.currentSentence.en) {
-                const utterThis = new SpeechSynthesisUtterance(store.sentenceToCheck)
-                utterThis.lang = 'en-US'
-                setCorrect(true)
-                if (!speechSynthesis.speaking) {
-                    speechSynthesis.speak(utterThis)
-                }
-            }
-            setShowStatus(true)
-            setTimeout(() => setShowStatus(false), 3000)
+        if (store.sentenceToCheck !== store.currentSentence.en) {
+            setCorrect(false)
         }
+        if (store.sentenceToCheck === store.currentSentence.en) {
+            const utterThis = new SpeechSynthesisUtterance(store.sentenceToCheck)
+            utterThis.lang = 'en-US'
+            setCorrect(true)
+            if (!speechSynthesis.speaking) {
+                speechSynthesis.speak(utterThis)
+            }
+        }
+        setShowStatus(true)
+        setTimeout(() => setShowStatus(false), 3000)
     }
 
     return (
-        <ButtonWrapper>
+        <CheckSentenceControlsContainer>
             <VerificationStatusContainer isCorrect={isCorrect}>
                 {isCorrect ? <Text text={'Correct!'} /> : <Text text={'Something is wrong!'} />}
             </VerificationStatusContainer>
             <ButtonContainer showStatus={showStatus}>
                 <Button onClick={checkSentence} />
             </ButtonContainer>
-        </ButtonWrapper>
+        </CheckSentenceControlsContainer>
     )
 }
 

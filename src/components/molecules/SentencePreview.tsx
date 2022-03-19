@@ -2,7 +2,7 @@ import React from 'react'
 import { styled } from 'linaria/react'
 import { observer } from 'mobx-react-lite'
 import Icon from '../atoms/Icon'
-import Bubble from '../atoms/Bubble'
+import Bubble from './Bubble'
 import { store } from '../../stores/store'
 
 const SentencePreviewContainer = styled.div`

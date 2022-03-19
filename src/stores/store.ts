@@ -1,5 +1,6 @@
 import { makeAutoObservable, runInAction } from 'mobx'
-import { makeArrayWithIds, shuffleArray } from '../services/utils'
+import { makeArrayWithIds } from '../services/makeArrayWithIds'
+import { shuffleArray } from '../services/shuffleArray'
 import { fetchGraphQL } from '../services/api'
 import { ItemT, SentenceObject } from '../types'
 
@@ -7,7 +8,7 @@ class Store {
     sentences: SentenceObject[] = []
     currentSentence: SentenceObject = { ru: '', en: '' }
     sentenceToCheck: string | undefined
-    words: ItemT[] = []
+    startWords: ItemT[] = []
     targetWords: ItemT[] = []
 
     responseStatus: 'pending' | 'done' | 'error' | null = null
@@ -15,7 +16,7 @@ class Store {
 
     constructor() {
         makeAutoObservable(this)
-        runInAction(() => this.fetchSentences().then(() => this.setCurrenSentence())).then(() => this.setStartWords())
+        runInAction(() => this.fetchSentences().then(() => this.setCurrenSentence())).then(() => this.makeStartWords())
     }
 
     setCurrenSentence() {
@@ -27,14 +28,14 @@ class Store {
         this.targetWords = wordsArray
     }
 
-    setWords(wordsArray: ItemT[]) {
-        this.words = wordsArray
+    setStartWords(wordsArray: ItemT[]) {
+        this.startWords = wordsArray
     }
 
-    setStartWords() {
+    makeStartWords() {
         const words = this.currentSentence.en.split(' ')
         const wordsArray = makeArrayWithIds(shuffleArray(words))
-        this.setWords(wordsArray)
+        this.setStartWords(wordsArray)
     }
 
     setSentenceToCheck() {

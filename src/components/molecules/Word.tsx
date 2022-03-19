@@ -1,17 +1,18 @@
-import React, { useCallback, useRef } from 'react'
+import React, { forwardRef, useCallback, useRef } from 'react'
 import { styled } from 'linaria/react'
 import { useDrag, useDrop } from 'react-dnd'
 import Text from '../atoms/Text'
 import update from 'immutability-helper'
+import mergeRefs from '../../services/mergeRefs'
 import { store } from '../../stores/store'
 import type { Identifier, XYCoord } from 'dnd-core'
 import { DragItem, ItemT } from '../../types'
 
-type Props = {
+type StyleProps = {
     isDragging: boolean
 }
 
-const WordContainer = styled.div<Props>`
+const WordContainer = styled.div<StyleProps>`
     background: #fff;
     border: 1px solid #949494;
     border-radius: 12px;
@@ -29,8 +30,8 @@ interface WordProps {
     group?: 'start' | 'target'
 }
 
-const Word: React.FC<WordProps> = ({ id, text, index, group }) => {
-    const ref = useRef<HTMLDivElement>(null)
+const Word = forwardRef<HTMLDivElement, WordProps>(function Word({ id, text, index, group }, ref) {
+    const localRef = useRef<HTMLDivElement>(null)
 
     const moveWord = useCallback((dragIndex: number, hoverIndex: number) => {
         store.setTargetWords(
@@ -52,7 +53,7 @@ const Word: React.FC<WordProps> = ({ id, text, index, group }) => {
         },
         hover: (item: DragItem, monitor) => {
             if (group === 'target' && item.group === 'target') {
-                if (!ref.current) {
+                if (!localRef.current) {
                     return
                 }
                 const dragIndex = item.index
@@ -62,7 +63,7 @@ const Word: React.FC<WordProps> = ({ id, text, index, group }) => {
                     return
                 }
 
-                const hoverBoundingRect = ref.current?.getBoundingClientRect()
+                const hoverBoundingRect = localRef.current?.getBoundingClientRect()
                 const hoverMiddleX = (hoverBoundingRect.right - hoverBoundingRect.left) / 2
                 const clientOffset = monitor.getClientOffset()
                 const hoverClientX = (clientOffset as XYCoord).x - hoverBoundingRect.left
@@ -90,13 +91,12 @@ const Word: React.FC<WordProps> = ({ id, text, index, group }) => {
             isDragging: monitor.isDragging(),
         }),
     })
-
-    drag(drop(ref))
+    drag(drop(localRef))
     return (
-        <WordContainer ref={ref} isDragging={isDragging} data-handler-id={handlerId}>
+        <WordContainer ref={mergeRefs([localRef, ref])} isDragging={isDragging} data-handler-id={handlerId}>
             <Text text={text} />
         </WordContainer>
     )
-}
+})
 
 export default Word

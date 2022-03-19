@@ -11,13 +11,16 @@ export type ItemT = {
 
 export interface DragItem {
     id: number
-    type: string
     index: number
     group?: 'start' | 'target'
 }
 
 export type SentenceObject = {
     [key in Languages]: string
+}
+
+export type DOMRectsObject = {
+    [key: string]: DOMRect
 }
 
 export interface SentenceAllResponse {

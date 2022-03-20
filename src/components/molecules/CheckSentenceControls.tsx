@@ -27,7 +27,7 @@ const VerificationStatusContainer = styled.div<Pick<StyleProps, 'isCorrect'>>`
     justify-content: center;
     height: 30px;
     margin-top: 12px;
-
+    color: transparent;
     p {
         color: ${(props) => (props.isCorrect ? '#17d217' : '#f31616')};
     }

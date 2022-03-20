@@ -1,6 +1,6 @@
 import React from 'react'
 import { styled } from 'linaria/react'
-import Text from '../atoms/Text'
+import Text from './Text'
 import { TextProps } from '../../types'
 
 const TextBubble = styled.div`

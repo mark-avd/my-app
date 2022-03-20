@@ -1,13 +1,13 @@
 import React from 'react'
 import { DOMRectsObject } from '../types'
 
-interface Props {
+export interface ChildrenProps {
     ref: React.RefObject<HTMLDivElement>
     key: string
     children: React.ReactNode
 }
 
-const calculateBoundingBoxes = (children: Props) => {
+const calculateBoundingBoxes = (children: ChildrenProps) => {
     const boundingBoxes: DOMRectsObject = {}
     React.Children.map(children, (child) => {
         const domNode = child.ref.current

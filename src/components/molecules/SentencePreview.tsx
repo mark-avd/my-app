@@ -15,13 +15,14 @@ const IconContainer = styled.div`
     width: 40%;
 
     img {
+        padding-top: 12px;
         border-radius: 14px;
         width: 90%;
     }
 `
 
 const BubbleContainer = styled.div`
-    margin-left: 12px;
+    margin: 0 0 12px 12px;
     width: 60%;
 `
 

@@ -1,6 +1,6 @@
 import { makeAutoObservable, runInAction } from 'mobx'
-import { makeArrayWithIds } from '../services/makeArrayWithIds'
-import { shuffleArray } from '../services/shuffleArray'
+import { makeArrayWithIds } from '../utils/makeArrayWithIds'
+import { shuffleArray } from '../utils/shuffleArray'
 import { fetchGraphQL } from '../services/api'
 import { ItemT, SentenceObject } from '../types'
 
@@ -17,6 +17,10 @@ class Store {
     constructor() {
         makeAutoObservable(this)
         runInAction(() => this.fetchSentences().then(() => this.setCurrenSentence())).then(() => this.makeStartWords())
+    }
+
+    setSentences(sentences: SentenceObject[]) {
+        this.sentences = sentences
     }
 
     setCurrenSentence() {
@@ -42,8 +46,10 @@ class Store {
         this.sentenceToCheck = store.targetWords.map((word) => word.text).join(' ')
     }
 
-    setSentences(sentences: SentenceObject[]) {
-        this.sentences = sentences
+    renderNewSentence() {
+        this.setTargetWords([])
+        this.setCurrenSentence()
+        this.makeStartWords()
     }
 
     async fetchSentences() {

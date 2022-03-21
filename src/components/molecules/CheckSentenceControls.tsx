@@ -12,22 +12,21 @@ type StyleProps = {
 
 const CheckSentenceControlsContainer = styled.div`
     height: 120px;
+    margin-top: 16px;
 `
 
 const ButtonContainer = styled.div<Pick<StyleProps, 'showStatus'>>`
-    padding: 0 6px;
-    margin: ${(props) => (props.showStatus ? '12px' : '-32px')} auto;
-    transition: margin 0.5s ease;
+    margin: ${(props) => (props.showStatus ? '10px' : '-40px')} auto;
+    transition: margin 500ms ease;
     width: 90%;
 `
 
 const VerificationStatusContainer = styled.div<Pick<StyleProps, 'isCorrect'>>`
     display: flex;
+    color: transparent;
     font-weight: 600;
     justify-content: center;
-    height: 30px;
-    margin-top: 12px;
-    color: transparent;
+
     p {
         color: ${(props) => (props.isCorrect ? '#17d217' : '#f31616')};
     }
@@ -46,12 +45,13 @@ const CheckSentenceControls: React.FC = () => {
             const utterThis = new SpeechSynthesisUtterance(store.sentenceToCheck)
             utterThis.lang = 'en-US'
             setCorrect(true)
+            setTimeout(() => store.renderNewSentence(), 3000)
             if (!speechSynthesis.speaking) {
                 speechSynthesis.speak(utterThis)
             }
         }
         setShowStatus(true)
-        setTimeout(() => setShowStatus(false), 3000)
+        setTimeout(() => setShowStatus(false), 1500)
     }
 
     return (

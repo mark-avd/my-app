@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 import { styled } from 'linaria/react'
 import { useDrop } from 'react-dnd'
 import update from 'immutability-helper'
-import { sortById } from '../../services/sortById'
+import { sortById } from '../../utils/sortById'
 import { store } from '../../stores/store'
 import { DragItem } from '../../types'
 
@@ -15,8 +15,8 @@ const CloudContainer = styled.div`
     border-top: 1px solid #030303;
     display: flex;
     flex-wrap: wrap;
-    min-height: 100px;
-    padding-top: 6px;
+    min-height: 110px;
+    padding: 6px;
 `
 
 const Cloud: React.FC<CloudProps> = ({ group, children }) => {

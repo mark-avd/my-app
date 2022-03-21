@@ -28,11 +28,11 @@ const MainTemplateContainer = styled.div`
 
 const Heading = styled.h1`
     font-weight: 500;
-    margin: 0 0 24px 24px;
+    margin: 0 0 24px 12px;
 `
 
 const TranslatedSentenceContainer = styled.div`
-    margin-bottom: 24px;
+    margin-bottom: 12px;
 `
 
 const IconContainer = styled.div`
@@ -50,7 +50,11 @@ const MainTemplate: React.FC<MainTemplateProps> = ({ loadingIcon, dragDrop, sent
         <MainTemplateContainer>
             <Heading>Translate this sentence</Heading>
             <TranslatedSentenceContainer>{sentencePreview}</TranslatedSentenceContainer>
-            <React.Suspense fallback={<IconContainer>{loadingIcon}</IconContainer>}>{dragDrop}</React.Suspense>
+            <React.Suspense fallback={
+                <IconContainer>{loadingIcon}</IconContainer>
+            }>
+                {dragDrop}
+            </React.Suspense>
         </MainTemplateContainer>
     )
 }

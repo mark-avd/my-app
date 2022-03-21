@@ -12,7 +12,7 @@ const PrimaryButton = styled.button`
     box-shadow: 5px 7px 10px rgba(0, 0, 0, 0.1);
     font-size: medium;
     font-weight: 600;
-    padding: 20px;
+    padding: 16px 0;
     width: 100%;
 
     &:active {

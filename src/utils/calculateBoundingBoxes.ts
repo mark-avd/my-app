@@ -1,10 +1,7 @@
 import React from 'react'
 import { DOMRectsObject } from '../types'
 
-export interface ChildrenProps {
-    children: React.ReactNode
-}
-
+//TODO типизировать
 const calculateBoundingBoxes = (children: any) => {
     const boundingBoxes: DOMRectsObject = {}
     React.Children.map(children, (child) => {

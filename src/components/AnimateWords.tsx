@@ -4,6 +4,7 @@ import calculateBoundingBoxes from '../utils/calculateBoundingBoxes'
 import { DOMRectsObject } from '../types'
 
 interface AnimateWordsProps {
+    //TODO типизировать
     ({ children }: { children: any }): React.ReactElement
 }
 
@@ -37,7 +38,7 @@ const AnimateWords: AnimateWordsProps = ({ children }) => {
 
                     if (changeInX !== 0 || changeInY !== 0) {
                         requestAnimationFrame(() => {
-                            domNode.style.transform = `translate(${changeInX}px, ${changeInY}px)`
+                            domNode.style.transform = `translate3d(${changeInX}px, ${changeInY}px, 0)`
                             domNode.style.transition = 'transform 0s'
 
                             requestAnimationFrame(() => {

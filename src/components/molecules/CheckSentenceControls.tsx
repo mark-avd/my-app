@@ -16,8 +16,9 @@ const CheckSentenceControlsContainer = styled.div`
 `
 
 const ButtonContainer = styled.div<Pick<StyleProps, 'showStatus'>>`
-    margin: ${(props) => (props.showStatus ? '10px' : '-40px')} auto;
-    transition: margin 500ms ease;
+    margin: -40px auto 0;
+    transform: translate3d(0, ${props => props.showStatus ? '50px' : '0'}, 0);
+    transition: transform 500ms ease;
     width: 90%;
 `
 

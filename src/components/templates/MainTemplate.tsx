@@ -36,7 +36,6 @@ const TranslatedSentenceContainer = styled.div`
 `
 
 interface MainTemplateProps {
-    loadingIcon: React.ReactElement
     dragDrop: React.ReactElement
     sentencePreview: React.ReactElement
 }

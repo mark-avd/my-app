@@ -1,3 +1,5 @@
+import React from 'react'
+
 type Languages = 'ru' | 'en'
 
 export interface TextProps {
@@ -9,7 +11,7 @@ export type ItemT = {
     text: string
 }
 
-export interface DragItem {
+export type DragItem = {
     id: number
     index: number
     group?: 'start' | 'target'
@@ -27,4 +29,8 @@ export interface SentenceAllResponse {
     data: {
         sentenceAll: SentenceObject[]
     }
+}
+
+export interface AnimateWordsChild extends React.ReactElement {
+    ref?: React.RefObject<HTMLDivElement>
 }

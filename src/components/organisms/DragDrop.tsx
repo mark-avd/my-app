@@ -4,7 +4,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 import { TouchBackend } from 'react-dnd-touch-backend'
 import { observer } from 'mobx-react-lite'
 import Word from '../molecules/Word'
-import Cloud from '../molecules/Cloud'
+import Group from '../molecules/Group'
 import CheckSentenceControls from '../molecules/CheckSentenceControls'
 import AnimateWords from '../AnimateWords'
 import { isTouchDevice } from '../../utils/isTouchDevice'
@@ -29,14 +29,14 @@ const DragAndDrop: React.FC = () => {
     return (
         <>
             <DndProvider backend={isTouchScreen}>
-                <Cloud group={'target'}>
+                <Group type={'target'}>
                     {store.targetWords?.map((word: ItemT, index: number) => renderWord(word, index, 'target'))}
-                </Cloud>
-                <Cloud group={'start'}>
+                </Group>
+                <Group type={'start'}>
                     <AnimateWords>
                         {store.startWords?.map((word: ItemT, index: number) => renderWord(word, index, 'start'))}
                     </AnimateWords>
-                </Cloud>
+                </Group>
             </DndProvider>
             <CheckSentenceControls />
         </>

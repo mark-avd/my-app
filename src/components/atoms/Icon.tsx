@@ -9,8 +9,8 @@ interface IconProps {
 const Icon: React.FC<IconProps> = ({ type }) => {
     return (
         <>
-            {type === 'person' && <img src={personIcon} alt={'person icon'} />}
-            {type === 'loading' && <img src={loadingIcon} alt={'loading icon'} />}
+            {type === 'person' && <img src={personIcon} alt={'person icon'} width={159} height={150} />}
+            {type === 'loading' && <img src={loadingIcon} alt={'loading icon'} width={16} height={16} />}
         </>
     )
 }

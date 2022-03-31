@@ -1,7 +1,8 @@
 import { makeAutoObservable, runInAction } from 'mobx'
+import { fetchGraphQL } from '../services/api'
 import { makeArrayWithIds } from '../utils/makeArrayWithIds'
 import { shuffleArray } from '../utils/shuffleArray'
-import { fetchGraphQL } from '../services/api'
+import { sortById } from '../utils/sortById'
 import { ItemT, SentenceObject } from '../types'
 
 class Store {
@@ -40,6 +41,10 @@ class Store {
         const words = this.currentSentence.en.split(' ')
         const wordsArray = makeArrayWithIds(shuffleArray(words))
         this.setStartWords(wordsArray)
+    }
+
+    sortStartWords() {
+        this.setStartWords([...this.startWords].sort(sortById))
     }
 
     setSentenceToCheck() {

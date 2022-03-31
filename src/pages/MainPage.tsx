@@ -2,8 +2,7 @@ import React from 'react'
 import Icon from '../components/atoms/Icon'
 import SentencePreview from '../components/molecules/SentencePreview'
 import MainTemplate from '../components/templates/MainTemplate'
-
-const DragDrop = React.lazy(() => import('../components/organisms/DragDrop'))
+import DragDrop from '../components/organisms/DragDrop'
 
 const MainPage: React.FC = () => {
     return (

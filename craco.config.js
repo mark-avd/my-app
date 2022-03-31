@@ -5,9 +5,6 @@ module.exports = {
     plugins: [
         {
             plugin: CracoLinariaPlugin,
-            options: {
-                // Linaria options
-            },
         },
     ],
 }

@@ -2,15 +2,14 @@ import React, { useCallback } from 'react'
 import { styled } from 'linaria/react'
 import { useDrop } from 'react-dnd'
 import update from 'immutability-helper'
-import { sortById } from '../../utils/sortById'
 import { store } from '../../stores/store'
 import { DragItem } from '../../types'
 
 interface CloudProps {
-    group: 'start' | 'target'
+    type: 'start' | 'target'
 }
 
-const CloudContainer = styled.div`
+const GroupContainer = styled.div`
     align-content: flex-start;
     border-top: 1px solid #030303;
     display: flex;
@@ -19,7 +18,7 @@ const CloudContainer = styled.div`
     padding: 6px;
 `
 
-const Cloud: React.FC<CloudProps> = ({ group, children }) => {
+const Group: React.FC<CloudProps> = ({ type, children }) => {
     const moveWordToTargetGroup = useCallback((dragIndex: number) => {
         store.setTargetWords(
             update(store.targetWords, {
@@ -50,16 +49,16 @@ const Cloud: React.FC<CloudProps> = ({ group, children }) => {
         accept: 'word',
         drop: (item) => {
             const dragIndex = item.index
-            if (group === 'target' && item.group === 'start') {
+            if (type === 'target' && item.group === 'start') {
                 moveWordToTargetGroup(dragIndex)
             }
-            if (group === 'start' && item.group === 'target') {
+            if (type === 'start' && item.group === 'target') {
                 moveWordToStartGroup(dragIndex)
-                setTimeout(() => store.setStartWords([...store.startWords].sort(sortById)), 500)
+                setTimeout(() => store.sortStartWords(), 500)
             }
         },
     })
-    return <CloudContainer ref={drop}>{children}</CloudContainer>
+    return <GroupContainer ref={drop}>{children}</GroupContainer>
 }
 
-export default Cloud
+export default Group

@@ -35,26 +35,18 @@ const TranslatedSentenceContainer = styled.div`
     margin-bottom: 12px;
 `
 
-const IconContainer = styled.div`
-    margin: 0 auto;
-`
-
 interface MainTemplateProps {
     loadingIcon: React.ReactElement
     dragDrop: React.ReactElement
     sentencePreview: React.ReactElement
 }
 
-const MainTemplate: React.FC<MainTemplateProps> = ({ loadingIcon, dragDrop, sentencePreview }) => {
+const MainTemplate: React.FC<MainTemplateProps> = ({ dragDrop, sentencePreview }) => {
     return (
         <MainTemplateContainer>
             <Heading>Translate this sentence</Heading>
             <TranslatedSentenceContainer>{sentencePreview}</TranslatedSentenceContainer>
-            <React.Suspense fallback={
-                <IconContainer>{loadingIcon}</IconContainer>
-            }>
-                {dragDrop}
-            </React.Suspense>
+            {dragDrop}
         </MainTemplateContainer>
     )
 }

@@ -7,6 +7,7 @@ import Word from '../molecules/Word'
 import Group from '../molecules/Group'
 import CheckSentenceControls from '../molecules/CheckSentenceControls'
 import AnimateWords from '../AnimateWords'
+import LoadingDummy from '../molecules/LoadingDummy'
 import { isTouchDevice } from '../../utils/isTouchDevice'
 import { store } from '../../stores/store'
 import { ItemT } from '../../types'
@@ -30,12 +31,20 @@ const DragAndDrop: React.FC = () => {
         <>
             <DndProvider backend={isTouchScreen}>
                 <Group type={'target'}>
-                    {store.targetWords?.map((word: ItemT, index: number) => renderWord(word, index, 'target'))}
+                    {store.targetWords?.map((word: ItemT, index: number) =>
+                        renderWord(word, index, 'target')
+                    )}
                 </Group>
                 <Group type={'start'}>
-                    <AnimateWords>
-                        {store.startWords?.map((word: ItemT, index: number) => renderWord(word, index, 'start'))}
-                    </AnimateWords>
+                    {store.loading ? (
+                        <LoadingDummy />
+                    ) : (
+                        <AnimateWords>
+                            {store.startWords?.map((word: ItemT, index: number) =>
+                                renderWord(word, index, 'start')
+                            )}
+                        </AnimateWords>
+                    )}
                 </Group>
             </DndProvider>
             <CheckSentenceControls />

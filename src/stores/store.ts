@@ -13,11 +13,16 @@ class Store {
     targetWords: ItemT[] = []
 
     responseStatus: 'pending' | 'done' | 'error' | null = null
+    loading: boolean | null = null
     error: unknown
 
     constructor() {
         makeAutoObservable(this)
-        runInAction(() => this.fetchSentences().then(() => this.setCurrenSentence())).then(() => this.makeStartWords())
+        runInAction(async () => {
+            await this.fetchSentences()
+            this.setCurrenSentence()
+            this.makeStartWords()
+        }).then()
     }
 
     setSentences(sentences: SentenceObject[]) {
@@ -52,24 +57,37 @@ class Store {
     }
 
     renderNewSentence() {
-        this.setTargetWords([])
-        this.setCurrenSentence()
-        this.makeStartWords()
+        setTimeout(() => {
+            this.setLoadingBegins()
+            this.setTargetWords([])
+            this.setCurrenSentence()
+            this.makeStartWords()
+        }, 2000)
+        setTimeout(() => this.setLoadingComplete(), 3000)
+    }
+    setLoadingBegins() {
+        this.loading = true
     }
 
+    setLoadingComplete() {
+        this.loading = false
+    }
     async fetchSentences() {
         this.responseStatus = 'pending'
+        this.loading = true
 
         try {
             const response = await fetchGraphQL()
             runInAction(() => {
                 this.sentences = response.data.sentenceAll
                 this.responseStatus = 'done'
+                this.loading = false
             })
         } catch (error: unknown) {
             runInAction(() => {
                 this.error = error
                 this.responseStatus = 'error'
+                this.loading = false
             })
         }
     }

@@ -19,7 +19,7 @@ const ButtonContainer = styled.div<Pick<StyleProps, 'showStatus'>>`
     margin: -40px auto 0;
     transform: translate3d(0, ${props => props.showStatus ? '50px' : '0'}, 0);
     transition: transform 500ms ease;
-    width: 90%;
+    width: 60%;
 `
 
 const VerificationStatusContainer = styled.div<Pick<StyleProps, 'isCorrect'>>`
@@ -46,7 +46,7 @@ const CheckSentenceControls: React.FC = () => {
             const utterThis = new SpeechSynthesisUtterance(store.sentenceToCheck)
             utterThis.lang = 'en-US'
             setCorrect(true)
-            setTimeout(() => store.renderNewSentence(), 3000)
+            store.renderNewSentence()
             if (!speechSynthesis.speaking) {
                 speechSynthesis.speak(utterThis)
             }

@@ -23,12 +23,12 @@ const Group: React.FC<CloudProps> = ({ type, children }) => {
         store.setTargetWords(
             update(store.targetWords, {
                 $push: [store.startWords[dragIndex]],
-            })
+            }),
         )
         store.setStartWords(
             update(store.startWords, {
                 $splice: [[dragIndex, 1]],
-            })
+            }),
         )
     }, [])
 
@@ -36,12 +36,12 @@ const Group: React.FC<CloudProps> = ({ type, children }) => {
         store.setStartWords(
             update(store.startWords, {
                 $push: [store.targetWords[dragIndex]],
-            })
+            }),
         )
         store.setTargetWords(
             update(store.targetWords, {
                 $splice: [[dragIndex, 1]],
-            })
+            }),
         )
     }, [])
 

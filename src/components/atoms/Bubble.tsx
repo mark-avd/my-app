@@ -1,13 +1,16 @@
 import React from 'react'
 import { styled } from 'linaria/react'
+import { observer } from 'mobx-react-lite'
 import Text from './Text'
+import LoadingDummy from '../molecules/LoadingDummy'
+import { store } from '../../stores/store'
 import { TextProps } from '../../types'
 
 const TextBubble = styled.div`
     background: #ffffff;
     border: #030303 solid 1px;
     border-radius: 13px 13px 13px 8px;
-    padding: 6px;
+    padding: 2px 4px;
     position: relative;
     width: 100%;
 
@@ -39,9 +42,9 @@ const TextBubble = styled.div`
 const Bubble: React.FC<TextProps> = ({ text }) => {
     return (
         <TextBubble>
-            <Text text={text} />
+            {store.loading ? <LoadingDummy />: <Text text={text} />}
         </TextBubble>
     )
 }
 
-export default Bubble
+export default observer(Bubble)

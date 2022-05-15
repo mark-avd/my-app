@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { styled } from 'linaria/react'
+import styled from 'styled-components'
 import { useDrop } from 'react-dnd'
 import update from 'immutability-helper'
 import { store } from '../../stores/store'
@@ -7,6 +7,7 @@ import { DragItem } from '../../types'
 
 interface CloudProps {
     type: 'start' | 'target'
+    children: React.ReactElement
 }
 
 const GroupContainer = styled.div`
@@ -23,12 +24,12 @@ const Group: React.FC<CloudProps> = ({ type, children }) => {
         store.setTargetWords(
             update(store.targetWords, {
                 $push: [store.startWords[dragIndex]],
-            }),
+            })
         )
         store.setStartWords(
             update(store.startWords, {
                 $splice: [[dragIndex, 1]],
-            }),
+            })
         )
     }, [])
 
@@ -36,12 +37,12 @@ const Group: React.FC<CloudProps> = ({ type, children }) => {
         store.setStartWords(
             update(store.startWords, {
                 $push: [store.targetWords[dragIndex]],
-            }),
+            })
         )
         store.setTargetWords(
             update(store.targetWords, {
                 $splice: [[dragIndex, 1]],
-            }),
+            })
         )
     }, [])
 

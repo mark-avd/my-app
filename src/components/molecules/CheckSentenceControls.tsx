@@ -1,28 +1,23 @@
 import React, { useState } from 'react'
-import { styled } from 'linaria/react'
+import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import Text from '../atoms/Text'
 import Button from '../atoms/Button'
 import { store } from '../../stores/store'
-
-type StyleProps = {
-    showStatus: boolean
-    isCorrect: boolean
-}
 
 const CheckSentenceControlsContainer = styled.div`
     height: 120px;
     margin-top: 16px;
 `
 
-const ButtonContainer = styled.div<Pick<StyleProps, 'showStatus'>>`
+const ButtonContainer = styled.div<{ showStatus: boolean }>`
     margin: -40px auto 0;
-    transform: translate3d(0, ${props => props.showStatus ? '50px' : '0'}, 0);
+    transform: translate3d(0, ${(props) => (props.showStatus ? '50px' : '0')}, 0);
     transition: transform 500ms ease;
     width: 60%;
 `
 
-const VerificationStatusContainer = styled.div<Pick<StyleProps, 'isCorrect'>>`
+const VerificationStatusContainer = styled.div<{ isCorrect: boolean }>`
     display: flex;
     color: transparent;
     font-weight: 600;

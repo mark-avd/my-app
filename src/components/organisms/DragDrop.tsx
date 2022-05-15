@@ -31,9 +31,11 @@ const DragAndDrop: React.FC = () => {
         <>
             <DndProvider backend={isTouchScreen}>
                 <Group type={'target'}>
-                    {store.targetWords?.map((word: ItemT, index: number) =>
-                        renderWord(word, index, 'target')
-                    )}
+                    <>
+                        {store.targetWords?.map((word: ItemT, index: number) =>
+                            renderWord(word, index, 'target')
+                        )}
+                    </>
                 </Group>
                 <Group type={'start'}>
                     {store.loading ? (

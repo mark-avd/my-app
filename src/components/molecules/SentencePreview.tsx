@@ -1,5 +1,5 @@
 import React from 'react'
-import { styled } from 'linaria/react'
+import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import Icon from '../atoms/Icon'
 import Bubble from '../atoms/Bubble'

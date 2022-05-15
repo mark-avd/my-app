@@ -1,5 +1,5 @@
 import React from 'react'
-import { styled } from 'linaria/react'
+import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import Text from './Text'
 import LoadingDummy from '../molecules/LoadingDummy'
@@ -40,11 +40,7 @@ const TextBubble = styled.div`
 `
 
 const Bubble: React.FC<TextProps> = ({ text }) => {
-    return (
-        <TextBubble>
-            {store.loading ? <LoadingDummy />: <Text text={text} />}
-        </TextBubble>
-    )
+    return <TextBubble>{store.loading ? <LoadingDummy /> : <Text text={text} />}</TextBubble>
 }
 
 export default observer(Bubble)

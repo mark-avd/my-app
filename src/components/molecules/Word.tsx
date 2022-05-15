@@ -1,5 +1,5 @@
 import React, { forwardRef, useCallback, useRef } from 'react'
-import { styled } from 'linaria/react'
+import styled from 'styled-components'
 import { useDrag, useDrop } from 'react-dnd'
 import Text from '../atoms/Text'
 import update from 'immutability-helper'
@@ -8,11 +8,7 @@ import { store } from '../../stores/store'
 import type { Identifier, XYCoord } from 'dnd-core'
 import { DragItem, ItemT } from '../../types'
 
-type StyleProps = {
-    isDragging: boolean
-}
-
-const WordContainer = styled.div<StyleProps>`
+const WordContainer = styled.div<{ isDragging: boolean }>`
     background: #fff;
     border: 1px solid #949494;
     border-radius: 12px;
@@ -93,7 +89,11 @@ const Word = forwardRef<HTMLDivElement, WordProps>(function Word({ id, text, ind
     })
     drag(drop(localRef))
     return (
-        <WordContainer ref={mergeRefs([localRef, ref])} isDragging={isDragging} data-handler-id={handlerId}>
+        <WordContainer
+            ref={mergeRefs([localRef, ref])}
+            isDragging={isDragging}
+            data-handler-id={handlerId}
+        >
             <Text text={text} />
         </WordContainer>
     )
